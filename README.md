@@ -1,45 +1,47 @@
 # Jet changes from the original AlexaPi
-	This version provides support for Neopixel type arrays with Alexa (e.g. Neopixel Ring) on the Raspberry Pi.
-	Note: This has only been tested on Pi 3, you may need to change settings / pins for other Pi's.
+    This version provides support for Neopixel type arrays with Alexa (e.g. Neopixel Ring) on the Raspberry Pi.
+    Note: This has only been tested on Pi 3, you may need to change settings / pins for other Pi's.
 
-	Status changes in Alexa are sent via a UDP socket to the server which controls the neopixel ring.  Default udp port is 9999,
-	and can be set when starting the server, and in /etc/opt/AlexaPi/config.yaml (raspberrypi / neopixel_udp_port: 9999),
-	ensure both server and AlexaPi have matching ports
+    Status changes in Alexa are sent via a UDP socket to the server which controls the neopixel ring.  Default udp port is 9999,
+    and can be set when starting the server, and in /etc/opt/AlexaPi/config.yaml (raspberrypi / neopixel_udp_port: 9999),
+    ensure both server and AlexaPi have matching ports
 
-	## Neopixel Wiring
-	You will also need to install: https://github.com/jetty840/rpi_ws281x and start the server (see the github for instructions)
+## Neopixel Wiring
 
-	Connections as follows:
-		- Example: https://www.adafruit.com/product/1463
-		- +3.3V Neopixel +
-			- if supplying from Pi, verifying the onboard 3.3V can handle the current load from the neopixels
-			- if powering from 5V, you will need logic converter for the Data line
-		- GND   Neopixel -
-		- Data  Gpio 21
+    You will also need to install: https://github.com/jetty840/rpi_ws281x and start the server (see the github for instructions)
 
-	## Mute - Button/LED Wiring
-	I've added support for an led based momentary push button to enable/disable Alexa from responding,
-	(e.g. https://www.adafruit.com/product/481).  LED lit when Alexa is enabled, and not lit when disabled, pressing the
-	button toggles the state, and holding it for 5 seconds reboots the pi (assuming the pi hasn't crashed).  After 5 seconds, the button
-	led flashes rapidly, release the button to reboot
+    Connections as follows:
+        Example: https://www.adafruit.com/product/1463
+        - +3.3V Neopixel +
+            - if supplying from Pi, verifying the onboard 3.3V can handle the current load from the neopixels
+	    - if powering from 5V, you will need logic converter for the Data line
+        - GND   Neopixel -
+        - Data  Gpio 21
 
-	The existing button support for press to listen has been removed and replaced with this.
+## Mute - Button/LED Wiring
 
-	Connections as follows:
-		- Switch Normally Open Gpio 18 (button setting in /etc/opt/AlexaPi/config.yaml)
-		- Switch Common        GND
-		- Neg		       Gpio 22
-		- Pos		       +3.3V
+    I've added support for an led based momentary push button to enable/disable Alexa from responding,
+    (e.g. https://www.adafruit.com/product/481).  LED lit when Alexa is enabled, and not lit when disabled, pressing the
+    button toggles the state, and holding it for 5 seconds reboots the pi (assuming the pi hasn't crashed).  After 5 seconds, the button
+    led flashes rapidly, release the button to reboot
 
-	Relevant gpio's are set by "button" for the switch and "mute_light" for the led in /etc/opt/AlexaPi/config.yaml
+    The existing button support for press to listen has been removed and replaced with this.
 
-## Installing:
-	cd /opt
-	git clone https://github.com/jetty840/AlexaPi
-	install as per origin AlexaPi instructions
+    Connections as follows:
+        - Switch Normally Open Gpio 18 (button setting in /etc/opt/AlexaPi/config.yaml)
+        - Switch Common        GND
+        - Neg		       Gpio 22
+        - Pos		       +3.3V
 
+    Relevant gpio's are set by "button" for the switch and "mute_light" for the led in /etc/opt/AlexaPi/config.yaml
 
+## Installing
 
+    cd /opt
+    git clone https://github.com/jetty840/AlexaPi
+    install as per origin AlexaPi instructions
+
+---------
 
 # AlexaPi (the new & awesome version) [![Gitter chat](https://badges.gitter.im/alexa-pi/Lobby.png)](https://gitter.im/alexa-pi/Lobby)
 
