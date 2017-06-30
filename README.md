@@ -25,6 +25,12 @@
     button toggles the state, and holding it for 5 seconds reboots the pi (assuming the pi hasn't crashed).  After 5 seconds, the button
     led flashes rapidly, release the button to reboot
 
+    To add reboot capability, edit /etc/sudoers, and add:
+	# Cmnd alias specification
+	Cmnd_Alias SHUTDOWN_CMDS = /sbin/reboot
+
+	alexapi ALL=(ALL) NOPASSWD: SHUTDOWN_CMDS
+
     The existing button support for press to listen has been removed and replaced with this.
 
     Connections as follows:
