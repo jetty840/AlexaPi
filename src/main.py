@@ -514,7 +514,6 @@ def trigger_callback(trigger):
 
 
 def trigger_process(trigger):
-
 	if player.is_playing():
 		player.stop()
 
@@ -528,23 +527,33 @@ def trigger_process(trigger):
 			except Exception as exp: # pylint: disable=broad-except
 				logger.warning(exp)
 
-	if event_commands['pre_interaction']:
-		subprocess.Popen(event_commands['pre_interaction'], shell=True, stdout=subprocess.PIPE)
+	if trigger.__class__.__name__ == 'PlatformTrigger':
+		platform.toggle_microphone_onoff()
+		if platform.is_microphone_on():
+			triggers.enable()
+		else:
+			trigger.enable()
+	elif not platform.is_microphone_on():
+		logger.debug('microphone is off, ignoring trigger')
+		triggers.enable()
+	else:
+		if event_commands['pre_interaction']:
+			subprocess.Popen(event_commands['pre_interaction'], shell=True, stdout=subprocess.PIPE)
 
-	force_record = None
-	if trigger.event_type in triggers.types_continuous:
-		force_record = (trigger.continuous_callback, trigger.event_type in triggers.types_vad)
+		force_record = None
+		if trigger.event_type in triggers.types_continuous:
+			force_record = (trigger.continuous_callback, trigger.event_type in triggers.types_vad)
 
-	if trigger.voice_confirm:
-		player.play_speech(resources_path + 'alexayes.mp3')
+		if trigger.voice_confirm:
+			player.play_speech(resources_path + 'alexayes.mp3')
 
-	audio_stream = capture.silence_listener(force_record=force_record)
-	alexa_speech_recognizer(audio_stream)
+		audio_stream = capture.silence_listener(force_record=force_record)
+		alexa_speech_recognizer(audio_stream)
 
-	triggers.enable()
+		triggers.enable()
 
-	if event_commands['post_interaction']:
-		subprocess.Popen(event_commands['post_interaction'], shell=True, stdout=subprocess.PIPE)
+		if event_commands['post_interaction']:
+			subprocess.Popen(event_commands['post_interaction'], shell=True, stdout=subprocess.PIPE)
 
 
 def cleanup(signal, frame):   # pylint: disable=redefined-outer-name,unused-argument

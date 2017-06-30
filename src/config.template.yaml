@@ -124,6 +124,10 @@ platforms:
     plb_light: 24
     # GPIO Pin for the recording light
     rec_light: 25
+    # UDP port number of the ws281x_udp_server
+    neopixel_udp_port: 9999
+    # GPIO Pin for mute light
+    mute_light: 22
 
   orangepi:
     # GPIO Pin with button connected
