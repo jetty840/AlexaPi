@@ -128,6 +128,8 @@ platforms:
     neopixel_udp_port: 9999
     # GPIO Pin for mute light
     mute_light: 22
+    # Invert logic of mute light if set to 1
+    mute_light_invert: 1
 
   orangepi:
     # GPIO Pin with button connected

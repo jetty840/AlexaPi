@@ -45,8 +45,20 @@ class RPiLikePlatform(BasePlatform):
 
 	def toggle_microphone_onoff(self):
 		self.microphone_active = self.microphone_active ^ True
-		GPIO.output(self._pconfig['mute_light'], GPIO.LOW if self.microphone_active else GPIO.HIGH)
-		
+		logger.debug(self.microphone_active)
+		logger.debug(self._pconfig['mute_light_invert'])
+		if self.microphone_active:
+			if self._pconfig['mute_light_invert'] == 1:
+				gpioOut = GPIO.LOW
+			else:
+				gpioOut = GPIO.HIGH
+		else:
+			if self._pconfig['mute_light_invert'] == 1:
+				gpioOut = GPIO.HIGH
+			else:
+				gpioOut = GPIO.LOW
+		logger.debug(gpioOut)
+		GPIO.output(self._pconfig['mute_light'], gpioOut)
 
 	def indicate_failure(self):
 		for _ in range(0, 5):
