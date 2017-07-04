@@ -87,20 +87,21 @@ class RPiLikePlatform(BasePlatform):
 		GPIO.output(self._pconfig['rec_light'], GPIO.HIGH if state else GPIO.LOW)
 
 	def detect_button(self, channel=None): # pylint: disable=unused-argument
-		# time.sleep(.5)  # time for the button input to settle down
+		time.sleep(.1)  # time for the button input to settle down
 
 		if GPIO.input(self._pconfig['button']) == 0:
+			logger.debug("Button pressed!")
+	
 			self.button_pressed = True
 
 			self._trigger_callback(self.force_recording)
 
-			logger.debug("Button pressed!")
-	
 			rebootflag = False
 			time_start = time.time()
 			while GPIO.input(self._pconfig['button']) == 0:
-				if ( time.time() - time_start ) >= 5:
+				if ( time.time() - time_start ) >= 5 and rebootflag == False:
 					rebootflag = True	
+					self.neopixelChange('reboot')
 				if rebootflag:
 					 self.toggle_microphone_onoff()
 				time.sleep(.1)
