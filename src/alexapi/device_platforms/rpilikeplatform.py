@@ -31,7 +31,7 @@ class RPiLikePlatform(BasePlatform):
 		GPIO.setup(self._pconfig['mute_light'], GPIO.OUT)
 		GPIO.output(self._pconfig['rec_light'], GPIO.LOW)
 		GPIO.output(self._pconfig['plb_light'], GPIO.LOW)
-		GPIO.setup(self._pconfig['mute_light'], GPIO.LOW)
+		GPIO.output(self._pconfig['mute_light'], bool(self._pconfig['mute_light_invert']) ^ self.microphone_active)
 		self.neopixelChange('alexapi_startup')
 
 	def neopixelChange(self, aname):
@@ -45,20 +45,7 @@ class RPiLikePlatform(BasePlatform):
 
 	def toggle_microphone_onoff(self):
 		self.microphone_active = self.microphone_active ^ True
-		logger.debug(self.microphone_active)
-		logger.debug(self._pconfig['mute_light_invert'])
-		if self.microphone_active:
-			if self._pconfig['mute_light_invert'] == 1:
-				gpioOut = GPIO.LOW
-			else:
-				gpioOut = GPIO.HIGH
-		else:
-			if self._pconfig['mute_light_invert'] == 1:
-				gpioOut = GPIO.HIGH
-			else:
-				gpioOut = GPIO.LOW
-		logger.debug(gpioOut)
-		GPIO.output(self._pconfig['mute_light'], gpioOut)
+		GPIO.output(self._pconfig['mute_light'], bool(self._pconfig['mute_light_invert']) ^ self.microphone_active)
 
 	def indicate_failure(self):
 		for _ in range(0, 5):
